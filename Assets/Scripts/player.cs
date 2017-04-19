@@ -9,7 +9,11 @@ public class player : MonoBehaviour {
 	public Image uiArrow;
 	public CanvasGroup canvasFlash;
 	private bool flash;
+	private Rigidbody rb;
 	// Use this for initialization
+	void Start() {
+		rb = GetComponent<Rigidbody>();
+	}
 	void OnCollisionStay(Collision collide) {
 		if (collide.gameObject.tag == "Ground") {
 			isGrounded = true;
@@ -22,7 +26,21 @@ public class player : MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
+	Vector3 MousePointInWorld() {
+		Ray mousePoint = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Plane zPlane = new Plane(new Vector3(0, 0, 1), new Vector3(0,0,0));
+		float dist;
+		zPlane.Raycast(mousePoint, out dist);
+		return mousePoint.GetPoint(dist);
+	}
+
+	RaycastHit RaycastToMouse() {
+		Vector3 direction = MousePointInWorld() - transform.position;
+		RaycastHit hitInfo;
+		Physics.Raycast(transform.position, direction, out hitInfo, Mathf.Infinity);
+		return hitInfo;
+	}
+
 	void Update () {
 		if (flash) {
 			canvasFlash.alpha = canvasFlash.alpha - Time.deltaTime * 3;
@@ -59,6 +77,10 @@ public class player : MonoBehaviour {
 				uiArrow.sprite = arrowSprites[1];
 				flash = true;
 				canvasFlash.alpha = 1;
+			}
+
+			if(Input.GetKeyDown("mouse 1")) {
+				rb.AddForce((MousePointInWorld() - transform.position).normalized * 500);
 			}
 		}
 	}
