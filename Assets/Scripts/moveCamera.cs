@@ -6,7 +6,9 @@ public class moveCamera : MonoBehaviour {
 
 	public GameObject viewCamera;
 	public Vector3 moveTo;
+	public Color bgColor;
 	public float targetRot;
+	private Camera viewCam;
 	private BoxCollider cd;
 	private MeshRenderer mr;
 	private Vector3 startPos;
@@ -20,6 +22,8 @@ public class moveCamera : MonoBehaviour {
 	void Start() {
 		mr = GetComponent<MeshRenderer>();
 		cd = GetComponent<BoxCollider>();
+		viewCamera.transform.position = new Vector3(0, 0, -36);
+		viewCam = viewCamera.GetComponent<Camera>();
 	}
 
 	void OnTriggerExit() {
@@ -31,6 +35,7 @@ public class moveCamera : MonoBehaviour {
 		rotTo = Quaternion.Euler(0, 0, targetRot);
 		mr.enabled = true;
 		cd.isTrigger = false;
+		viewCam.backgroundColor = bgColor;
 	}
 	// Update is called once per frame
 	void Update() {

@@ -5,8 +5,6 @@ using System.Collections;
 
 public class player : MonoBehaviour {
 	private bool isGrounded = false;
-	public Sprite[] arrowSprites = new Sprite[4];
-	public Image uiArrow;
 	public CanvasGroup canvasFlash;
 	public Transform cameraTransform;
 	private bool flash;
@@ -52,7 +50,8 @@ public class player : MonoBehaviour {
 		}
 
 		if(isGrounded) {
-			if(Input.GetKeyDown(KeyCode.W) && uiArrow.sprite != arrowSprites[0]) {
+			if(Input.GetKeyDown(KeyCode.W)) {
+				Vector3 oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 0:
 						Physics.gravity = new Vector3(0, 9.81f, 0);
@@ -67,13 +66,14 @@ public class player : MonoBehaviour {
 						Physics.gravity = new Vector3(9.81f, 0, 0);
 						break;
 				}
-
-				uiArrow.sprite = arrowSprites[0];
-				flash = true;
-				canvasFlash.alpha = 1;
+				if (oldGrav != Physics.gravity) {
+					flash = true;
+					canvasFlash.alpha = 1;
+				}	
 			}
 
-			if(Input.GetKeyDown(KeyCode.S) && uiArrow.sprite != arrowSprites[2]) {
+			if(Input.GetKeyDown(KeyCode.S)) {
+				Vector3 oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 0:
 						Physics.gravity = new Vector3(0, -9.81f, 0);
@@ -88,12 +88,14 @@ public class player : MonoBehaviour {
 						Physics.gravity = new Vector3(-9.81f, 0, 0);
 						break;
 				}
-				uiArrow.sprite = arrowSprites[2];
-				flash = true;
-				canvasFlash.alpha = 1;
+				if (oldGrav != Physics.gravity) {
+					flash = true;
+					canvasFlash.alpha = 1;
+				}
 			}
 
-			if(Input.GetKeyDown(KeyCode.A) && uiArrow.sprite != arrowSprites[3]) {
+			if(Input.GetKeyDown(KeyCode.A)) {
+				Vector3 oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 0:
 						Physics.gravity = new Vector3(-9.81f, 0, 0);
@@ -108,12 +110,14 @@ public class player : MonoBehaviour {
 						Physics.gravity = new Vector3(0, 9.81f, 0);
 						break;
 				}
-				uiArrow.sprite = arrowSprites[3];
-				flash = true;
-				canvasFlash.alpha = 1;
+				if (oldGrav != Physics.gravity) {
+					flash = true;
+					canvasFlash.alpha = 1;
+				}
 			}
 
-			if(Input.GetKeyDown(KeyCode.D) && uiArrow.sprite != arrowSprites[1]) {
+			if(Input.GetKeyDown(KeyCode.D)) {
+				Vector3 oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 90:
 						Physics.gravity = new Vector3(0, 9.81f, 0);
@@ -128,9 +132,10 @@ public class player : MonoBehaviour {
 						Physics.gravity = new Vector3(9.81f, 0, 0);
 						break;
 				}
-				uiArrow.sprite = arrowSprites[1];
-				flash = true;
-				canvasFlash.alpha = 1;
+				if (oldGrav != Physics.gravity) {
+					flash = true;
+					canvasFlash.alpha = 1;
+				}
 			}
 
 			if(Input.GetKeyDown("mouse 1")) {
