@@ -8,6 +8,7 @@ public class player : MonoBehaviour {
 	public Sprite[] arrowSprites = new Sprite[4];
 	public Image uiArrow;
 	public CanvasGroup canvasFlash;
+	public Transform cameraTransform;
 	private bool flash;
 	private Rigidbody rb;
 	// Use this for initialization
@@ -52,28 +53,81 @@ public class player : MonoBehaviour {
 
 		if(isGrounded) {
 			if(Input.GetKeyDown(KeyCode.W) && uiArrow.sprite != arrowSprites[0]) {
-				Physics.gravity = new Vector3(0, 9.81f, 0);
+				switch ((int)cameraTransform.eulerAngles.z) {
+					case 0:
+						Physics.gravity = new Vector3(0, 9.81f, 0);
+						break;
+					case 90:
+						Physics.gravity = new Vector3(-9.81f, 0, 0);
+						break;
+					case 180:
+						Physics.gravity = new Vector3(0, -9.81f, 0);
+						break;
+					case 270:
+						Physics.gravity = new Vector3(9.81f, 0, 0);
+						break;
+				}
+
 				uiArrow.sprite = arrowSprites[0];
 				flash = true;
 				canvasFlash.alpha = 1;
 			}
 
 			if(Input.GetKeyDown(KeyCode.S) && uiArrow.sprite != arrowSprites[2]) {
-				Physics.gravity = new Vector3(0, -9.81f, 0);
+				switch ((int)cameraTransform.eulerAngles.z) {
+					case 0:
+						Physics.gravity = new Vector3(0, -9.81f, 0);
+						break;
+					case 90:
+						Physics.gravity = new Vector3(9.81f, 0, 0);
+						break;
+					case 180:
+						Physics.gravity = new Vector3(0, 9.81f, 0);
+						break;
+					case 270:
+						Physics.gravity = new Vector3(-9.81f, 0, 0);
+						break;
+				}
 				uiArrow.sprite = arrowSprites[2];
 				flash = true;
 				canvasFlash.alpha = 1;
 			}
 
 			if(Input.GetKeyDown(KeyCode.A) && uiArrow.sprite != arrowSprites[3]) {
-				Physics.gravity = new Vector3(-9.81f, 0, 0);
+				switch ((int)cameraTransform.eulerAngles.z) {
+					case 0:
+						Physics.gravity = new Vector3(-9.81f, 0, 0);
+						break;
+					case 90:
+						Physics.gravity = new Vector3(0, -9.81f, 0);
+						break;
+					case 180:
+						Physics.gravity = new Vector3(9.81f, 0, 0);
+						break;
+					case 270:
+						Physics.gravity = new Vector3(0, 9.81f, 0);
+						break;
+				}
 				uiArrow.sprite = arrowSprites[3];
 				flash = true;
 				canvasFlash.alpha = 1;
 			}
 
 			if(Input.GetKeyDown(KeyCode.D) && uiArrow.sprite != arrowSprites[1]) {
-				Physics.gravity = new Vector3(9.81f, 0, 0);
+				switch ((int)cameraTransform.eulerAngles.z) {
+					case 90:
+						Physics.gravity = new Vector3(0, 9.81f, 0);
+						break;
+					case 180:
+						Physics.gravity = new Vector3(-9.81f, 0, 0);
+						break;
+					case 270:
+						Physics.gravity = new Vector3(0, -9.81f, 0);
+						break;
+					case 0:
+						Physics.gravity = new Vector3(9.81f, 0, 0);
+						break;
+				}
 				uiArrow.sprite = arrowSprites[1];
 				flash = true;
 				canvasFlash.alpha = 1;
