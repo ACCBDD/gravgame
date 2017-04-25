@@ -4,14 +4,23 @@ using System.Collections;
 
 
 public class player : MonoBehaviour {
-	private bool isGrounded = false;
+
+	public GameObject viewCamera;
 	public CanvasGroup canvasFlash;
 	public Transform cameraTransform;
-	private bool flash;
+
+	private Quaternion startRot;
+	private Quaternion rotTo;
 	private Rigidbody rb;
-	// Use this for initialization
+	public Vector3 oldGrav;
+	private bool isGrounded = false;
+	private bool flash;
+	private bool moveEnabled = false;
+	private float startTime;
+
 	void Start() {
 		rb = GetComponent<Rigidbody>();
+		oldGrav = Physics.gravity;
 	}
 	void OnCollisionStay(Collision collide) {
 		if (collide.gameObject.tag == "Ground") {
@@ -43,15 +52,41 @@ public class player : MonoBehaviour {
 	void Update () {
 		if (flash) {
 			canvasFlash.alpha = canvasFlash.alpha - Time.deltaTime * 3;
-						if (canvasFlash.alpha <= 0) {
-								canvasFlash.alpha = 0;
-								flash = false;
-						}
+			if (canvasFlash.alpha <= 0) {
+				canvasFlash.alpha = 0;
+				flash = false;
+			}
+		}
+
+		if (oldGrav != Physics.gravity) {
+			startRot = viewCamera.transform.rotation;
+			if (Physics.gravity == new Vector3(0, 9.81f, 0)) {
+				rotTo = Quaternion.Euler(0, 0, 180);
+			} else if (Physics.gravity == new Vector3(0, -9.81f, 0)) {
+				rotTo = Quaternion.Euler(0, 0, 0);
+			} else if (Physics.gravity == new Vector3(9.81f, 0, 0)) {
+				rotTo = Quaternion.Euler(0, 0, 90);
+			} else {
+				rotTo = Quaternion.Euler(0, 0, 270);
+			}
+			startTime = Time.time;
+			moveEnabled = true;
+			oldGrav = Physics.gravity;
+		}
+
+		if (moveEnabled) {
+			float dist = (Time.time - startTime) * 30;
+			float travel = dist/40 * (Mathf.PI/2);
+			viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, Mathf.Sin(travel));
+			if(travel >= (Mathf.PI/2)) {
+				viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, 1);
+				moveEnabled = false;
+			}
 		}
 
 		if(isGrounded) {
 			if(Input.GetKeyDown(KeyCode.W)) {
-				Vector3 oldGrav = Physics.gravity;
+				oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 0:
 						Physics.gravity = new Vector3(0, 9.81f, 0);
@@ -69,11 +104,11 @@ public class player : MonoBehaviour {
 				if (oldGrav != Physics.gravity) {
 					flash = true;
 					canvasFlash.alpha = 1;
-				}	
+				}
 			}
 
 			if(Input.GetKeyDown(KeyCode.S)) {
-				Vector3 oldGrav = Physics.gravity;
+				oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 0:
 						Physics.gravity = new Vector3(0, -9.81f, 0);
@@ -95,7 +130,7 @@ public class player : MonoBehaviour {
 			}
 
 			if(Input.GetKeyDown(KeyCode.A)) {
-				Vector3 oldGrav = Physics.gravity;
+				oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 0:
 						Physics.gravity = new Vector3(-9.81f, 0, 0);
@@ -117,7 +152,7 @@ public class player : MonoBehaviour {
 			}
 
 			if(Input.GetKeyDown(KeyCode.D)) {
-				Vector3 oldGrav = Physics.gravity;
+				oldGrav = Physics.gravity;
 				switch ((int)cameraTransform.eulerAngles.z) {
 					case 90:
 						Physics.gravity = new Vector3(0, 9.81f, 0);

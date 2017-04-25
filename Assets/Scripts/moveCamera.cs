@@ -25,11 +25,10 @@ public class moveCamera : MonoBehaviour {
 
 	void OnTriggerExit() {
 		startPos = viewCamera.transform.position;
-		startRot = viewCamera.transform.rotation;
+		//startRot = viewCamera.transform.rotation;
 		moveEnabled = true;
 		startTime = Time.time;
 		moveLength = Vector3.Distance(startPos, moveTo);
-		rotTo = Quaternion.Euler(0, 0, targetRot);
 		mr.enabled = true;
 		cd.isTrigger = false;
 	}
@@ -39,10 +38,10 @@ public class moveCamera : MonoBehaviour {
 			float dist = (Time.time - startTime) * speed;
 			float travel = dist/moveLength * (Mathf.PI/2);
 			viewCamera.transform.position = Vector3.Lerp(startPos, moveTo, Mathf.Sin(travel));
-			viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, Mathf.Sin(travel));
+			//viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, Mathf.Sin(travel));
 			if(travel >= (Mathf.PI/2)) {
 				viewCamera.transform.position = Vector3.Lerp(startPos, moveTo, 1);
-				viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, 1);
+				//viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, 1);
 				moveEnabled = false;
 			}
 		}
