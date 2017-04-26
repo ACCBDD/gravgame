@@ -4,18 +4,25 @@ using System.Collections;
 
 
 public class player : MonoBehaviour {
-	private bool isGrounded = false;
+	public bool isGrounded = false;
 	public CanvasGroup canvasFlash;
+	public Image flashImage;
 	public Transform cameraTransform;
 	private bool flash;
 	private Rigidbody rb;
 	// Use this for initialization
+	void Awake () {
+		Screen.SetResolution(640, 640, false);
+	}
 	void Start() {
 		rb = GetComponent<Rigidbody>();
 	}
+
 	void OnCollisionStay(Collision collide) {
-		if (collide.gameObject.tag == "Ground") {
-			isGrounded = true;
+		if (collide.gameObject.tag == "Respawn") {
+			flash = true;
+			canvasFlash.alpha = 1;
+			flashImage.color = new Color(1, 0, 0, 0.8f);
 		}
 	}
 
@@ -43,10 +50,10 @@ public class player : MonoBehaviour {
 	void Update () {
 		if (flash) {
 			canvasFlash.alpha = canvasFlash.alpha - Time.deltaTime * 3;
-						if (canvasFlash.alpha <= 0) {
-								canvasFlash.alpha = 0;
-								flash = false;
-						}
+			if (canvasFlash.alpha <= 0) {
+				canvasFlash.alpha = 0;
+				flash = false;
+			}
 		}
 
 		if(isGrounded) {
@@ -68,8 +75,9 @@ public class player : MonoBehaviour {
 				}
 				if (oldGrav != Physics.gravity) {
 					flash = true;
+					flashImage.color = new Color(1, 1, 1, 0.39f);
 					canvasFlash.alpha = 1;
-				}	
+				}
 			}
 
 			if(Input.GetKeyDown(KeyCode.S)) {
@@ -90,6 +98,7 @@ public class player : MonoBehaviour {
 				}
 				if (oldGrav != Physics.gravity) {
 					flash = true;
+					flashImage.color = new Color(1, 1, 1, 0.39f);
 					canvasFlash.alpha = 1;
 				}
 			}
@@ -113,6 +122,7 @@ public class player : MonoBehaviour {
 				if (oldGrav != Physics.gravity) {
 					flash = true;
 					canvasFlash.alpha = 1;
+					flashImage.color = new Color(1, 1, 1, 0.39f);
 				}
 			}
 
@@ -135,6 +145,7 @@ public class player : MonoBehaviour {
 				if (oldGrav != Physics.gravity) {
 					flash = true;
 					canvasFlash.alpha = 1;
+					flashImage.color = new Color(1, 1, 1, 0.39f);
 				}
 			}
 
