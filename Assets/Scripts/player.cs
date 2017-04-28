@@ -1,21 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 
 public class player : MonoBehaviour {
 	public bool isGrounded = false;
+	public bool flash;
+	public float fadeSpeed = 3;
 	public CanvasGroup canvasFlash;
 	public Image flashImage;
 	public Transform cameraTransform;
-	private bool flash;
-	private Rigidbody rb;
+	public Text textBox;
+
+	private string centiSecond, minutes, seconds;
+
 	// Use this for initialization
 	void Awake () {
 		Screen.SetResolution(640, 640, false);
-	}
-	void Start() {
-		rb = GetComponent<Rigidbody>();
+		for (int i = 0; i < 10; i++) {
+			if(!PlayerPrefs.HasKey("Highscore"+ i.ToString() + "Score")) {
+				PlayerPrefs.SetFloat("Highscore"+ i.ToString() + "Score", 9999);
+				PlayerPrefs.SetString("Highscore"+ i.ToString() + "Name", "<blank>");
+				Debug.Log(i.ToString() + " " + PlayerPrefs.GetFloat("Highscore"+ i.ToString() + "Score").ToString() + " " + PlayerPrefs.GetString("Highscore"+ i.ToString() + "Name"));
+			}
+
+		}
 	}
 
 	void OnCollisionStay(Collision collide) {
@@ -32,28 +42,32 @@ public class player : MonoBehaviour {
 		}
 	}
 
-	Vector3 MousePointInWorld() {
-		Ray mousePoint = Camera.main.ScreenPointToRay(Input.mousePosition);
-		Plane zPlane = new Plane(new Vector3(0, 0, 1), new Vector3(0,0,0));
-		float dist;
-		zPlane.Raycast(mousePoint, out dist);
-		return mousePoint.GetPoint(dist);
-	}
-
-	RaycastHit RaycastToMouse() {
-		Vector3 direction = MousePointInWorld() - transform.position;
-		RaycastHit hitInfo;
-		Physics.Raycast(transform.position, direction, out hitInfo, Mathf.Infinity);
-		return hitInfo;
-	}
-
 	void Update () {
+
+		if (flashImage.color != new Color(0, 0, 1, 1f)) {
+			centiSecond = Mathf.Round((Time.timeSinceLevelLoad * 100) % 100).ToString();
+			seconds = Mathf.Round(Time.timeSinceLevelLoad % 60).ToString();
+			minutes = Mathf.Floor(Time.timeSinceLevelLoad/60).ToString();
+			if (int.Parse(seconds) < 10) { seconds = "0" + seconds.ToString(); }
+			if (int.Parse(centiSecond) < 10) { centiSecond = "0" + centiSecond; }
+			if (int.Parse(minutes) < 10) { minutes = "0" + minutes; }
+			textBox.text = minutes + ":" + seconds + "." + centiSecond;
+		} else {
+			if (canvasFlash.alpha == 0)
+				Destroy(gameObject);
+		}
+
 		if (flash) {
-			canvasFlash.alpha = canvasFlash.alpha - Time.deltaTime * 3;
+			canvasFlash.alpha = canvasFlash.alpha - Time.deltaTime * fadeSpeed;
 			if (canvasFlash.alpha <= 0) {
 				canvasFlash.alpha = 0;
 				flash = false;
 			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.R)) {
+			Physics.gravity = new Vector3(0, -9.81f, 0);
+			SceneManager.LoadScene(0);
 		}
 
 		if(isGrounded) {
@@ -147,10 +161,6 @@ public class player : MonoBehaviour {
 					canvasFlash.alpha = 1;
 					flashImage.color = new Color(1, 1, 1, 0.39f);
 				}
-			}
-
-			if(Input.GetKeyDown("mouse 1")) {
-				rb.AddForce((MousePointInWorld() - transform.position).normalized * 500);
 			}
 		}
 	}

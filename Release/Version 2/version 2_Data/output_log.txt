@@ -15,7 +15,7 @@ Platform assembly: C:\Users\harris\Documents\gravgame\Release\Version 2\version 
 Loading C:\Users\harris\Documents\gravgame\Release\Version 2\version 2_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\harris\Documents\gravgame\Release\Version 2\version 2_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\harris\Documents\gravgame\Release\Version 2\version 2_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.227 seconds
+- Completed reload, in  0.018 seconds
 Platform assembly: C:\Users\harris\Documents\gravgame\Release\Version 2\version 2_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\harris\Documents\gravgame\Release\Version 2\version 2_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
@@ -26,9 +26,9 @@ The referenced script on this Behaviour (Game Object 'Main Camera') is missing!
  
 (Filename:  Line: 1743)
 
-UnloadTime: 1.024421 ms
+UnloadTime: 1.012660 ms
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 5edc -> priority: 1 
-  Thread -> id: 3d8c -> priority: 1 
-  Thread -> id: 190c -> priority: 1 
-  Thread -> id: 4608 -> priority: 1 
+  Thread -> id: cb8 -> priority: 1 
+  Thread -> id: 1cd4 -> priority: 1 
+  Thread -> id: 5da8 -> priority: 1 
+  Thread -> id: 5050 -> priority: 1 
