@@ -13,8 +13,9 @@ public class player : MonoBehaviour {
 	public Transform cameraTransform;
 	public Text textBox;
 
-	private string centiSecond, minutes, seconds;
 
+	private string centiSecond, minutes, seconds;
+	private AudioSource sound;
 	// Use this for initialization
 	void Awake () {
 		Screen.SetResolution(640, 640, false);
@@ -26,6 +27,10 @@ public class player : MonoBehaviour {
 			}
 
 		}
+	}
+
+	void Start() {
+		sound = GetComponent<AudioSource>();
 	}
 
 	void OnCollisionStay(Collision collide) {
@@ -67,7 +72,7 @@ public class player : MonoBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.R)) {
 			Physics.gravity = new Vector3(0, -9.81f, 0);
-			SceneManager.LoadScene(0);
+			SceneManager.LoadScene(1);
 		}
 
 		if(isGrounded) {
@@ -91,6 +96,7 @@ public class player : MonoBehaviour {
 					flash = true;
 					flashImage.color = new Color(1, 1, 1, 0.39f);
 					canvasFlash.alpha = 1;
+					sound.Play();
 				}
 			}
 
@@ -114,6 +120,7 @@ public class player : MonoBehaviour {
 					flash = true;
 					flashImage.color = new Color(1, 1, 1, 0.39f);
 					canvasFlash.alpha = 1;
+					sound.Play();
 				}
 			}
 
@@ -137,6 +144,7 @@ public class player : MonoBehaviour {
 					flash = true;
 					canvasFlash.alpha = 1;
 					flashImage.color = new Color(1, 1, 1, 0.39f);
+					sound.Play();
 				}
 			}
 
@@ -160,6 +168,7 @@ public class player : MonoBehaviour {
 					flash = true;
 					canvasFlash.alpha = 1;
 					flashImage.color = new Color(1, 1, 1, 0.39f);
+					sound.Play();
 				}
 			}
 		}

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class endCamera : MonoBehaviour {
 
@@ -11,6 +12,8 @@ public class endCamera : MonoBehaviour {
 	public player daddy;
 	public Text highscoreCongrats, highscoreName, highscoreListName, highscoreListScores;
 	public InputField nameInput;
+	public AudioClip winmusic;
+	public AudioSource bgm;
 	private int scoreIndex;
 	private Vector3 startPos;
 	private Quaternion startRot;
@@ -39,15 +42,15 @@ public class endCamera : MonoBehaviour {
 		formatNumAsTime(PlayerPrefs.GetFloat("Highscore8Score")) + "\n" +
 		formatNumAsTime(PlayerPrefs.GetFloat("Highscore9Score"));
 
-		highscoreListName.text = PlayerPrefs.GetString("Highscore0Name") + "\n" +
-		PlayerPrefs.GetString("Highscore1Name") + "\n" +
-		PlayerPrefs.GetString("Highscore2Name") + "\n" +
-		PlayerPrefs.GetString("Highscore3Name") + "\n" +
-		PlayerPrefs.GetString("Highscore4Name") + "\n" +
-		PlayerPrefs.GetString("Highscore5Name") + "\n" +
-		PlayerPrefs.GetString("Highscore6Name") + "\n" +
-		PlayerPrefs.GetString("Highscore7Name") + "\n" +
-		PlayerPrefs.GetString("Highscore8Name") + "\n" +
+		highscoreListName.text = "1. " + PlayerPrefs.GetString("Highscore0Name") + "\n2. " +
+		PlayerPrefs.GetString("Highscore1Name") + "\n3. " +
+		PlayerPrefs.GetString("Highscore2Name") + "\n4. " +
+		PlayerPrefs.GetString("Highscore3Name") + "\n5. " +
+		PlayerPrefs.GetString("Highscore4Name") + "\n6. " +
+		PlayerPrefs.GetString("Highscore5Name") + "\n7. " +
+		PlayerPrefs.GetString("Highscore6Name") + "\n8. " +
+		PlayerPrefs.GetString("Highscore7Name") + "\n9. " +
+		PlayerPrefs.GetString("Highscore8Name") + "\n10. " +
 		PlayerPrefs.GetString("Highscore9Name");
 	}
 
@@ -65,6 +68,8 @@ public class endCamera : MonoBehaviour {
 		yield return new WaitForSeconds (3.0f);
 		moveEnabled = true;
 		startTime = Time.time;
+		bgm.clip = winmusic;
+		bgm.Play();
 	}
 
 	void checkHighscore(float finishTime) {
@@ -116,6 +121,7 @@ public class endCamera : MonoBehaviour {
 			rotTo = Quaternion.Euler(0, 0, targetRot);
 			gameEndTime = Time.timeSinceLevelLoad;
 			StartCoroutine(startRotating());
+			bgm.Stop();
 		}
 	}
 	// Update is called once per frame
@@ -134,6 +140,10 @@ public class endCamera : MonoBehaviour {
 				viewCamera.transform.rotation = Quaternion.Lerp(startRot, rotTo, 1);
 				moveEnabled = false;
 			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.Escape)) {
+			SceneManager.LoadScene(0);
 		}
 	}
 }
